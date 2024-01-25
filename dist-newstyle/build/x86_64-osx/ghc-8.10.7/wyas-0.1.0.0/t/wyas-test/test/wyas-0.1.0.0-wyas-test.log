@@ -1,0 +1,22 @@
+Test suite wyas-test: RUNNING...
+
+Lexer
+  test
+    1 [✔]
+Parsec
+  oneOf
+    1 [✔]
+    2 [✔]
+    3 [✔]
+    4 [✔]
+  parseC
+    1 [✔]
+    2 [✔]
+  parse
+    1 [✔]
+    2 [✔]
+
+Finished in 0.0013 seconds
+9 examples, 0 failures
+Test suite wyas-test: PASS
+Test suite logged to: /Users/fredrik/Documents/wyas/dist-newstyle/build/x86_64-osx/ghc-8.10.7/wyas-0.1.0.0/t/wyas-test/test/wyas-0.1.0.0-wyas-test.log
