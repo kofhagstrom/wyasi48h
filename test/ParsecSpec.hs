@@ -8,7 +8,7 @@ spec = do
   describe "oneOf" $ do
     it "1" $
       let actual = run (oneOf "abc") "abc"
-          expected = Right ("a", "bc")
+          expected = Right ('a', "bc")
        in actual `shouldBe` expected
     it "2" $
       let actual = run (oneOf "xyz") "abc"

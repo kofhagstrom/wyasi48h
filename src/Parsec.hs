@@ -15,7 +15,7 @@ where
 
 import Control.Applicative (Alternative (empty, (<|>)))
 import Data.Functor (($>))
-import Prelude hiding (all)
+import Prelude hiding (all, pred)
 
 data ParseError = UnexpectedError deriving (Eq, Show)
 
@@ -49,10 +49,10 @@ instance (Semigroup i) => Monad (Parser i) where
     run (f a) input'
 
 parseC :: (o -> Bool) -> Parser [o] o
-parseC p = Parser f
+parseC predicate = Parser f
   where
     f all@(t : ts) =
-      if p t
+      if predicate t
         then Right (t, ts)
         else Left ([UnexpectedError], all)
     f [] = Left ([UnexpectedError], [])
@@ -67,12 +67,10 @@ of_ f =
     ([], rest) -> Left ([UnexpectedError], rest)
     (str, rest) -> Right (str, rest)
 
-oneOf :: Eq a => [a] -> Parser [a] [a]
-oneOf options = of_ f
-  where
-    f input = case input of
-      (x : xs) -> if options `contains` x then ([x], xs) else ([], input)
-      [] -> ([], [])
+oneOf :: Eq o => [o] -> Parser [o] o
+oneOf options = Parser $ \input -> case input of
+  (x : xs) -> if options `contains` x then Right (x, xs) else Left ([UnexpectedError], input)
+  [] -> Left ([UnexpectedError], [])
 
 manyOf :: Eq a => [a] -> Parser [a] [a]
 manyOf options = of_ (span (options `contains`))
@@ -89,7 +87,7 @@ parse :: (Eq a) => [a] -> Parser [a] [a]
 parse = traverse (parseC . (==))
 
 skip :: Eq a => [a] -> Parser [a] ()
-skip c = () <$ parse c
+skip pred = parse pred $> ()
 
 ignore :: Functor f => f a -> f ()
 ignore p = p $> ()

@@ -6,13 +6,15 @@ import Test.Hspec
 
 spec :: Spec
 spec = do
-  describe "test" $ do
+  describe "tokens" $ do
     it "1" $
-      let actual = run tokens "(this is (a test) \"We must have spaces and ()\" (brackets))"
+      let actual = run tokens "(th(is is (a test) \"We must have spaces and ()\" (brackets)) and numbers 1423\nand (this) is row number 2"
           expected =
             Right
               ( [ LeftBracket,
-                  Symbol "this",
+                  Symbol "th",
+                  LeftBracket,
+                  Symbol "is",
                   Symbol "is",
                   LeftBracket,
                   Symbol "a",
@@ -22,7 +24,18 @@ spec = do
                   LeftBracket,
                   Symbol "brackets",
                   RightBracket,
-                  RightBracket
+                  RightBracket,
+                  Symbol "and",
+                  Symbol "numbers",
+                  Number "1423",
+                  Symbol "and",
+                  LeftBracket,
+                  Symbol "this",
+                  RightBracket,
+                  Symbol "is",
+                  Symbol "row",
+                  Symbol "number",
+                  Number "2"
                 ],
                 ""
               )
